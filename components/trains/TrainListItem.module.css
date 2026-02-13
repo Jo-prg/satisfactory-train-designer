@@ -1,0 +1,91 @@
+.trainItem {
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: 1px solid transparent;
+}
+
+.trainItem:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(102, 126, 234, 0.3);
+}
+
+.trainItem.active {
+  background: rgba(102, 126, 234, 0.15);
+  border-color: rgba(102, 126, 234, 0.5);
+}
+
+.content {
+  flex: 1;
+  min-width: 0;
+}
+
+.nameRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.name {
+  font-weight: 600;
+  font-size: 14px;
+  color: #f0f0f0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.activeDot {
+  color: #667eea;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+.stats {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 2px;
+}
+
+.stat {
+  white-space: nowrap;
+}
+
+.separator {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.timestamp {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.actions {
+  display: flex;
+  gap: 4px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  flex-shrink: 0;
+}
+
+.trainItem:hover .actions {
+  opacity: 1;
+}
+
+.trainItem.active .actions {
+  opacity: 0.7;
+}
+
+.trainItem.active:hover .actions {
+  opacity: 1;
+}

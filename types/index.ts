@@ -20,10 +20,24 @@ export interface ItemFormData {
   imageData: string | null;
 }
 
+export interface Train {
+  id: string;
+  name: string;
+  items: Item[];
+  createdAt: number;
+  updatedAt: number;
+}
+
 export interface ModalState {
   isOpen: boolean;
   mode: 'add' | 'edit';
   editingItemId: string | null;
+}
+
+export interface SaveTrainModalState {
+  isOpen: boolean;
+  mode: 'save' | 'rename';
+  trainId?: string;
 }
 
 export interface ValidationResult {
@@ -51,6 +65,11 @@ export const imageFileSchema = z.object({
     message: 'Please select a valid image file (PNG, JPG, GIF, or WebP)'
   }),
 });
+
+export const trainNameSchema = z.string()
+  .min(1, 'Train name is required')
+  .max(50, 'Train name must be 50 characters or less')
+  .trim();
 
 // ========== COMPONENT PROPS ==========
 
@@ -124,4 +143,46 @@ export interface ImageUploadFieldProps {
 
 export interface EmptyStateProps {
   message?: string;
+}
+
+
+
+export interface BadgeProps {
+  value: number;
+  label: string;
+}
+
+export interface TrainListItemProps {
+  train: Train;
+  isActive: boolean;
+  onClick: () => void;
+  onRename: () => void;
+  onDelete: () => void;
+}
+
+export interface TrainSidebarProps {
+  trains: Train[];
+  activeTrainId: string | null;
+  onSelectTrain: (id: string) => void;
+  onNewTrain: () => void;
+  onRenameTrain: (id: string) => void;
+  onDeleteTrain: (id: string) => void;
+  hasUnsavedChanges: boolean;
+}
+
+export interface SaveTrainModalProps {
+  isOpen: boolean;
+  mode: 'save' | 'rename';
+  currentName?: string;
+  existingNames: string[];
+  onClose: () => void;
+  onSave: (name: string) => void;
+}
+
+export interface UnsavedChangesModalProps {
+  isOpen: boolean;
+  trainName: string;
+  onSave: () => void;
+  onDiscard: () => void;
+  onCancel: () => void;
 }
