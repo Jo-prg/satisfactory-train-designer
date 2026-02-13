@@ -1,7 +1,6 @@
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import type { FreightCarProps } from '@/types';
-import { DragHandle } from './DragHandle';
 import styles from './FreightCar.module.css';
 
 export function FreightCar({ item, color }: FreightCarProps) {
@@ -26,10 +25,9 @@ export function FreightCar({ item, color }: FreightCarProps) {
       ref={setNodeRef}
       className={`${styles.freightCar} freightCar`}
       style={{ ...style, borderColor: color }}
+      {...attributes}
+      {...listeners}
     >
-      <div className={styles.dragHandleWrapper} {...attributes} {...listeners}>
-        <DragHandle isDragging={isDragging} />
-      </div>
       <img src="/freightcar.svg" alt="Freight Car" className={styles.carBase} />
       <div className={styles.carContent}>
         {item.imageData ? (

@@ -5,7 +5,6 @@ import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import type { ItemCardProps } from '@/types';
 import { Badge } from '@/components/ui/Badge';
-import { DragHandle } from '@/components/train/DragHandle';
 import styles from './ItemCard.module.css';
 
 export function ItemCard({ item, onEdit, onDelete }: ItemCardProps) {
@@ -35,12 +34,10 @@ export function ItemCard({ item, onEdit, onDelete }: ItemCardProps) {
       ref={setNodeRef}
       className={`${styles.card} ${isDragging ? styles.dragging : ''}`}
       style={style}
+      {...attributes}
+      {...listeners}
       onClick={() => onEdit(item.id)}
     >
-      <div className={styles.dragHandleWrapper} {...attributes} {...listeners}>
-        <DragHandle isDragging={isDragging} />
-      </div>
-      
       <div className={styles.thumbnail}>
         {item.imageData ? (
           <img src={item.imageData} alt={item.name} />
@@ -62,7 +59,13 @@ export function ItemCard({ item, onEdit, onDelete }: ItemCardProps) {
 
       <Badge value={item.freightCars} label="Freight Cars" />
 
-      <div className={styles.actions} onClick={(e) => e.stopPropagation()}>
+      <div 
+        className={styles.actions} 
+        onClick={(e) => {
+          e.stopPropagation();
+        }}
+        onPointerDown={(e) => e.stopPropagation()}
+      >
         <button
           className={styles.editBtn}
           onClick={() => onEdit(item.id)}
