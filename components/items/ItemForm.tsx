@@ -84,8 +84,8 @@ export function ItemForm({ mode, initialData, onSubmit, onCancel }: ItemFormProp
         <input
           type="number"
           value={formData.stackSize || ''}
-          onChange={(e) => setFormData((prev) => ({ ...prev, stackSize: parseInt(e.target.value) || 1 }))}
-          min="1"
+          onChange={(e) => setFormData((prev) => ({ ...prev, stackSize: parseInt(e.target.value) || 0 }))}
+          min="0"
           step="1"
           className={styles.input}
         />

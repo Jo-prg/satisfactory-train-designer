@@ -128,6 +128,13 @@ export function useTrains() {
     }
   }, [trains, activeTrainId, updateActiveTrainId, createNewTrain]);
 
+  // Reorder trains in the sidebar
+  const reorderTrains = useCallback((fromIndex: number, toIndex: number) => {
+    const reordered = arrayMove(trains, fromIndex, toIndex);
+    setTrains(reordered);
+    saveTrains(reordered);
+  }, [trains]);
+
   // Add item to current working items
   const addItem = useCallback((data: ItemFormData) => {
     const freightCars = calculateFreightCars(
@@ -213,6 +220,7 @@ export function useTrains() {
     createNewTrain,
     renameTrain,
     deleteTrain,
+    reorderTrains,
     getCurrentTrainName,
     
     // Item operations (on current working items)

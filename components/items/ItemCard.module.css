@@ -3,19 +3,19 @@
   align-items: center;
   gap: 16px;
   padding: 16px;
-  border: 2px solid #e0e0e0;
+  border: 2px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
   margin-bottom: 12px;
   transition: all 0.3s;
   cursor: grab;
-  background: white;
+  background: rgba(255, 255, 255, 0.05);
   position: relative;
   user-select: none;
 }
 
 .card:hover {
-  border-color: #667eea;
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+  border-color: #e59344;
+  box-shadow: 0 4px 12px rgba(229, 147, 68, 0.15);
   transform: translateY(-2px);
 }
 
@@ -50,7 +50,7 @@
 .placeholder {
   font-size: 24px;
   font-weight: bold;
-  color: #667eea;
+  color: #e59344;
 }
 
 .details {
@@ -60,7 +60,7 @@
 
 .name {
   font-size: 18px;
-  color: #333;
+  color: #f0f0f0;
   margin-bottom: 8px;
   margin: 0 0 8px 0;
 }
@@ -69,7 +69,7 @@
   display: flex;
   gap: 16px;
   font-size: 13px;
-  color: #666;
+  color: rgba(255, 255, 255, 0.6);
   flex-wrap: wrap;
 }
 
@@ -85,7 +85,7 @@
   background: transparent;
   border: none;
   cursor: pointer;
-  color: #666;
+  color: rgba(255, 255, 255, 0.6);
   border-radius: 4px;
   transition: all 0.2s;
   display: flex;
@@ -94,13 +94,13 @@
 }
 
 .editBtn:hover {
-  background: #f0f0f0;
-  color: #333;
+  background: rgba(229, 147, 68, 0.2);
+  color: #e59344;
 }
 
 .deleteBtn:hover {
-  background: #fee;
-  color: #d32f2f;
+  background: rgba(211, 47, 47, 0.2);
+  color: #ff6b6b;
 }
 
 @media (max-width: 768px) {

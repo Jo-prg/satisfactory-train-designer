@@ -5,18 +5,18 @@
 .label {
   display: block;
   margin-bottom: 8px;
-  color: #555;
+  color: rgba(255, 255, 255, 0.8);
   font-weight: 500;
   font-size: 14px;
 }
 
 .required {
-  color: #d32f2f;
+  color: #ff6b6b;
 }
 
 .error {
   display: block;
-  color: #d32f2f;
+  color: #ff6b6b;
   font-size: 13px;
   margin-top: 4px;
 }

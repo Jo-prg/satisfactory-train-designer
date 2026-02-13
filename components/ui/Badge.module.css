@@ -6,13 +6,13 @@
 .badgeValue {
   font-size: 28px;
   font-weight: bold;
-  color: #667eea;
+  color: #e59344;
   line-height: 1;
 }
 
 .badgeLabel {
   font-size: 11px;
-  color: #999;
+  color: rgba(255, 255, 255, 0.6);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }

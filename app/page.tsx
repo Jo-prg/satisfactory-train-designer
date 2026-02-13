@@ -25,6 +25,7 @@ export default function Home() {
     createNewTrain,
     renameTrain,
     deleteTrain,
+    reorderTrains,
     getCurrentTrainName,
     addItem,
     updateItem,
@@ -170,11 +171,13 @@ export default function Home() {
         onNewTrain={handleNewTrain}
         onRenameTrain={handleRenameTrain}
         onDeleteTrain={deleteTrain}
+        onReorderTrains={reorderTrains}
         hasUnsavedChanges={hasUnsavedChanges}
       />
 
-      <div className={styles.mainContent}>
-        <header className={styles.header}>
+      <div className={styles.mainContentWrapper}>
+        <div className={styles.mainContent}>
+          <header className={styles.header}>
           <div className={styles.headerLeft}>
             <h1 className={styles.title}>Satisfactory Train Designer</h1>
             {currentTrainName && (
@@ -203,6 +206,7 @@ export default function Home() {
           <ItemList items={activeItems} onEdit={handleEdit} onDelete={handleDelete} onReorder={reorderItems} />
 
           <TrainVisualization items={activeItems} onReorder={reorderItems} />
+        </div>
         </div>
       </div>
 

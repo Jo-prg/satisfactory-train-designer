@@ -3,7 +3,7 @@
   height: 80px;
   background: #555;
   border-radius: 6px;
-  border: 3px solid #667eea;
+  border: 3px solid #e59344;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
   overflow: hidden;
   position: relative;
@@ -47,7 +47,7 @@
   align-items: center;
   justify-content: center;
   padding: 8px;
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.25);
 }
 
 .itemImage {

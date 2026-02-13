@@ -1,7 +1,7 @@
 .trainItem {
   padding: 12px;
   border-radius: 8px;
-  cursor: pointer;
+  cursor: grab;
   transition: all 0.2s ease;
   display: flex;
   justify-content: space-between;
@@ -9,16 +9,27 @@
   gap: 8px;
   background: transparent;
   border: 1px solid transparent;
+  user-select: none;
 }
 
 .trainItem:hover {
   background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(102, 126, 234, 0.3);
+  border-color: rgba(229, 147, 68, 0.3);
 }
 
 .trainItem.active {
-  background: rgba(102, 126, 234, 0.15);
-  border-color: rgba(102, 126, 234, 0.5);
+  background: rgba(229, 147, 68, 0.15);
+  border-color: rgba(229, 147, 68, 0.5);
+}
+
+.trainItem.dragging {
+  cursor: grabbing;
+  opacity: 0.5;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.trainItem:active {
+  cursor: grabbing;
 }
 
 .content {
@@ -43,7 +54,7 @@
 }
 
 .activeDot {
-  color: #667eea;
+  color: #e59344;
   font-size: 12px;
   flex-shrink: 0;
 }

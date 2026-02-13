@@ -169,6 +169,7 @@ export interface TrainSidebarProps {
   onNewTrain: () => void;
   onRenameTrain: (id: string) => void;
   onDeleteTrain: (id: string) => void;
+  onReorderTrains?: (fromIndex: number, toIndex: number) => void;
   hasUnsavedChanges: boolean;
 }
 

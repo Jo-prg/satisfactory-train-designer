@@ -1,8 +1,10 @@
 .input {
   width: 100%;
   padding: 12px;
-  border: 2px solid #e0e0e0;
+  border: 2px solid rgba(255, 255, 255, 0.2);
   border-radius: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  color: #f0f0f0;
   font-size: 16px;
   transition: border-color 0.3s;
   font-family: inherit;
@@ -10,7 +12,8 @@
 
 .input:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: #e59344;
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .inputWrapper {
@@ -20,7 +23,7 @@
 }
 
 .unit {
-  color: #666;
+  color: rgba(255, 255, 255, 0.6);
   font-size: 14px;
   white-space: nowrap;
 }

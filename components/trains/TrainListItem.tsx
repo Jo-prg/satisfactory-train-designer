@@ -1,4 +1,6 @@
 import { Edit, Trash2 } from 'lucide-react';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import type { TrainListItemProps } from '@/types';
 import { getTotalFreightCars } from '@/lib/calculations';
 import { Button } from '@/components/ui/Button';
@@ -7,6 +9,21 @@ import styles from './TrainListItem.module.css';
 export function TrainListItem({ train, isActive, onClick, onRename, onDelete }: TrainListItemProps) {
   const itemCount = train.items.length;
   const freightCarCount = getTotalFreightCars(train.items);
+
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: train.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+  };
 
   const handleRenameClick = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -24,7 +41,11 @@ export function TrainListItem({ train, isActive, onClick, onRename, onDelete }: 
 
   return (
     <div
-      className={`${styles.trainItem} ${isActive ? styles.active : ''}`}
+      ref={setNodeRef}
+      className={`${styles.trainItem} ${isActive ? styles.active : ''} ${isDragging ? styles.dragging : ''}`}
+      style={style}
+      {...attributes}
+      {...listeners}
       onClick={onClick}
     >
       <div className={styles.content}>
@@ -48,6 +69,7 @@ export function TrainListItem({ train, isActive, onClick, onRename, onDelete }: 
         <Button
           variant="icon"
           onClick={handleRenameClick}
+          onPointerDown={(e) => e.stopPropagation()}
           aria-label="Rename train"
           title="Rename train"
         >
@@ -56,6 +78,7 @@ export function TrainListItem({ train, isActive, onClick, onRename, onDelete }: 
         <Button
           variant="icon"
           onClick={handleDeleteClick}
+          onPointerDown={(e) => e.stopPropagation()}
           aria-label="Delete train"
           title="Delete train"
         >

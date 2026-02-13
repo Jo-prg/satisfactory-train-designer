@@ -13,34 +13,36 @@
 }
 
 .primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #e59344 0%, #f5a962 100%);
   color: white;
 }
 
 .primary:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 5px 15px rgba(229, 147, 68, 0.4);
 }
 
 .secondary {
-  background: #e0e0e0;
-  color: #333;
+  background: rgba(255, 255, 255, 0.1);
+  color: #f0f0f0;
+  border: 1px solid rgba(229, 147, 68, 0.3);
 }
 
 .secondary:hover:not(:disabled) {
-  background: #d0d0d0;
+  background: rgba(229, 147, 68, 0.2);
+  border-color: rgba(229, 147, 68, 0.5);
 }
 
 .icon {
   padding: 8px;
   background: transparent;
-  color: #666;
+  color: rgba(255, 255, 255, 0.6);
   border-radius: 4px;
 }
 
 .icon:hover:not(:disabled) {
-  background: #f0f0f0;
-  color: #333;
+  background: rgba(229, 147, 68, 0.2);
+  color: #e59344;
 }
 
 .btn:disabled {

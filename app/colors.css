@@ -1,0 +1,8 @@
+:root {
+  --primary-bg: #000000;
+  --primary-bg-light: #1a1a1a;
+  --primary-text: rgba(255, 255, 255, 0.8);
+  --accent: #ff9800;
+  --error: #e53935;
+  /* Add more as needed */
+}
