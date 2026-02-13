@@ -20,7 +20,8 @@ export function ImageUploadField({ onChange, initialPreview, error }: ImageUploa
     } else if (!file) {
       onChange(null);
     }
-  }, [preview, file, onChange]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [preview, file]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0] || null;

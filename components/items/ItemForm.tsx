@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import type { ItemFormProps } from '@/types';
 import { FormField } from '@/components/ui/FormField';
 import { ImageUploadField } from './ImageUploadField';
@@ -18,6 +18,7 @@ export function ItemForm({ mode, initialData, onSubmit, onCancel }: ItemFormProp
 
   const [errors, setErrors] = useState<Record<string, string>>({});
 
+  // Only run once when component mounts - rely on key prop to reset form
   useEffect(() => {
     if (initialData) {
       setFormData({
@@ -28,7 +29,8 @@ export function ItemForm({ mode, initialData, onSubmit, onCancel }: ItemFormProp
         imageData: initialData.imageData || null,
       });
     }
-  }, [initialData]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -47,7 +49,7 @@ export function ItemForm({ mode, initialData, onSubmit, onCancel }: ItemFormProp
         <input
           type="text"
           value={formData.name}
-          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+          onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
           placeholder="e.g., Uranium, Iron Ore"
           className={styles.input}
         />
@@ -58,7 +60,7 @@ export function ItemForm({ mode, initialData, onSubmit, onCancel }: ItemFormProp
           <input
             type="number"
             value={formData.loopTime || ''}
-            onChange={(e) => setFormData({ ...formData, loopTime: parseFloat(e.target.value) || 0 })}
+            onChange={(e) => setFormData((prev) => ({ ...prev, loopTime: parseFloat(e.target.value) || 0 }))}
             min="0"
             step="0.1"
             className={styles.input}
@@ -71,7 +73,7 @@ export function ItemForm({ mode, initialData, onSubmit, onCancel }: ItemFormProp
         <input
           type="number"
           value={formData.requiredParts || ''}
-          onChange={(e) => setFormData({ ...formData, requiredParts: parseFloat(e.target.value) || 0 })}
+          onChange={(e) => setFormData((prev) => ({ ...prev, requiredParts: parseFloat(e.target.value) || 0 }))}
           min="0"
           step="0.1"
           className={styles.input}
@@ -82,7 +84,7 @@ export function ItemForm({ mode, initialData, onSubmit, onCancel }: ItemFormProp
         <input
           type="number"
           value={formData.stackSize || ''}
-          onChange={(e) => setFormData({ ...formData, stackSize: parseInt(e.target.value) || 1 })}
+          onChange={(e) => setFormData((prev) => ({ ...prev, stackSize: parseInt(e.target.value) || 1 }))}
           min="1"
           step="1"
           className={styles.input}
@@ -90,7 +92,7 @@ export function ItemForm({ mode, initialData, onSubmit, onCancel }: ItemFormProp
       </FormField>
 
       <ImageUploadField
-        onChange={(imageData) => setFormData({ ...formData, imageData })}
+        onChange={useCallback((imageData) => setFormData((prev) => ({ ...prev, imageData })), [])}
         initialPreview={initialData?.imageData}
         error={errors.imageData}
       />
