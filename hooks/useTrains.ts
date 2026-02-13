@@ -6,6 +6,7 @@ import { getTrains, saveTrains, getActiveTrainId, setActiveTrainId, migrateOldIt
 import { generateTrainId } from '@/lib/generateTrainId';
 import { generateItemId } from '@/lib/idGenerator';
 import { calculateFreightCars } from '@/lib/calculations';
+import { arrayMove } from '@/lib/arrayUtils';
 
 export function useTrains() {
   const [trains, setTrains] = useState<Train[]>([]);
@@ -182,6 +183,12 @@ export function useTrains() {
     setHasUnsavedChanges(true);
   }, []);
 
+  // Reorder items in current working items
+  const reorderItems = useCallback((fromIndex: number, toIndex: number) => {
+    setCurrentItems(prev => arrayMove(prev, fromIndex, toIndex));
+    setHasUnsavedChanges(true);
+  }, []);
+
   // Get item from current working items
   const getItem = useCallback((id: string): Item | null => {
     return currentItems.find(item => item.id === id) || null;
@@ -212,6 +219,7 @@ export function useTrains() {
     addItem,
     updateItem,
     deleteItem,
+    reorderItems,
     getItem,
   };
 }

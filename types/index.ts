@@ -83,6 +83,7 @@ export interface ItemListProps {
   items: Item[];
   onEdit: (id: string) => void;
   onDelete: (id: string) => void;
+  onReorder?: (fromIndex: number, toIndex: number) => void;
 }
 
 export interface ItemModalProps {
@@ -112,6 +113,7 @@ export interface LocomotiveProps {
 
 export interface TrainVisualizationProps {
   items: Item[];
+  onReorder?: (fromIndex: number, toIndex: number) => void;
 }
 
 export interface FormFieldProps {

@@ -29,6 +29,7 @@ export default function Home() {
     addItem,
     updateItem,
     deleteItem,
+    reorderItems,
   } = useTrains();
 
   const { isOpen: isItemModalOpen, mode: itemMode, editingItemId, open: openItemModal, close: closeItemModal } = useModal();
@@ -199,9 +200,9 @@ export default function Home() {
             <Plus size={20} /> Add an item
           </Button>
 
-          <ItemList items={activeItems} onEdit={handleEdit} onDelete={handleDelete} />
+          <ItemList items={activeItems} onEdit={handleEdit} onDelete={handleDelete} onReorder={reorderItems} />
 
-          <TrainVisualization items={activeItems} />
+          <TrainVisualization items={activeItems} onReorder={reorderItems} />
         </div>
       </div>
 

@@ -1,0 +1,47 @@
+.dragHandle {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  color: rgba(255, 255, 255, 0.5);
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  transition: all 0.15s ease-out;
+  z-index: 10;
+  opacity: 0;
+}
+
+.dragHandle:hover {
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(0, 0, 0, 0.4);
+  transform: scale(1.05);
+}
+
+.dragHandle:active,
+.dragHandle.dragging {
+  cursor: grabbing;
+  color: white;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.dragHandle:focus {
+  outline: 2px solid #ffa94d;
+  outline-offset: 2px;
+  opacity: 1;
+}
+
+/* Show drag handle on parent hover or when dragging */
+:global(.freightCar:hover) .dragHandle,
+.dragHandle.dragging {
+  opacity: 1;
+}
+
+/* Keyboard accessibility */
+.dragHandle:focus-visible {
+  opacity: 1;
+}

@@ -25,6 +25,25 @@
   overflow-x: auto;
   margin-bottom: 20px;
   padding: 20px 0;
+  scroll-behavior: smooth;
+}
+
+.trainContainer::-webkit-scrollbar {
+  height: 8px;
+}
+
+.trainContainer::-webkit-scrollbar-track {
+  background: #e0e0e0;
+  border-radius: 4px;
+}
+
+.trainContainer::-webkit-scrollbar-thumb {
+  background: #999;
+  border-radius: 4px;
+}
+
+.trainContainer::-webkit-scrollbar-thumb:hover {
+  background: #666;
 }
 
 .train {

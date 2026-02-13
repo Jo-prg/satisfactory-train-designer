@@ -1,3 +1,17 @@
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from '@dnd-kit/core';
+import {
+  SortableContext,
+  sortableKeyboardCoordinates,
+  horizontalListSortingStrategy,
+} from '@dnd-kit/sortable';
 import type { TrainVisualizationProps, Item } from '@/types';
 import { getTotalFreightCars } from '@/lib/calculations';
 import { getItemColor } from '@/lib/colorUtils';
@@ -6,7 +20,31 @@ import { FreightCar } from './FreightCar';
 import { TrainLegend } from './TrainLegend';
 import styles from './TrainVisualization.module.css';
 
-export function TrainVisualization({ items }: TrainVisualizationProps) {
+export function TrainVisualization({ items, onReorder }: TrainVisualizationProps) {
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8, // 8px movement required before drag starts
+      },
+    }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (over && active.id !== over.id && onReorder) {
+      const oldIndex = items.findIndex((item) => item.id === active.id);
+      const newIndex = items.findIndex((item) => item.id === over.id);
+
+      if (oldIndex !== -1 && newIndex !== -1) {
+        onReorder(oldIndex, newIndex);
+      }
+    }
+  };
+
   if (items.length === 0) {
     return null;
   }
@@ -23,14 +61,13 @@ export function TrainVisualization({ items }: TrainVisualizationProps) {
     );
   }
 
-  // Build freight cars array with item assignments
-  const freightCars: { item: Item; color: string }[] = [];
-  items.forEach((item, itemIndex) => {
-    const color = getItemColor(itemIndex);
-    for (let i = 0; i < item.freightCars; i++) {
-      freightCars.push({ item, color });
-    }
-  });
+  // Build freight cars array with item assignments  
+  // Each item appears once with all its freight cars grouped together
+  const freightCarGroups: Array<{ item: Item; color: string; count: number }> = items.map((item, index) => ({
+    item,
+    color: getItemColor(index),
+    count: item.freightCars,
+  }));
 
   return (
     <div className={styles.visualization}>
@@ -41,15 +78,33 @@ export function TrainVisualization({ items }: TrainVisualizationProps) {
         </p>
       </div>
 
-      <div className={styles.trainContainer}>
-        <div className={styles.train}>
-          <Locomotive position="front" />
-          {freightCars.map((car, index) => (
-            <FreightCar key={index} item={car.item} color={car.color} />
-          ))}
-          <Locomotive position="back" />
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragEnd={handleDragEnd}
+      >
+        <div className={styles.trainContainer}>
+          <div className={styles.train}>
+            <Locomotive position="front" />
+            <SortableContext
+              items={items.map((item) => item.id)}
+              strategy={horizontalListSortingStrategy}
+            >
+              {freightCarGroups.map((group) =>
+                // Render each freight car for this item
+                Array.from({ length: group.count }).map((_, carIndex) => (
+                  <FreightCar
+                    key={`${group.item.id}-${carIndex}`}
+                    item={group.item}
+                    color={group.color}
+                  />
+                ))
+              )}
+            </SortableContext>
+            <Locomotive position="back" />
+          </div>
         </div>
-      </div>
+      </DndContext>
 
       <TrainLegend items={items} />
     </div>

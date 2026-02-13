@@ -1,11 +1,29 @@
 'use client';
 
 import { Edit, Trash2 } from 'lucide-react';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import type { ItemCardProps } from '@/types';
 import { Badge } from '@/components/ui/Badge';
+import { DragHandle } from '@/components/train/DragHandle';
 import styles from './ItemCard.module.css';
 
 export function ItemCard({ item, onEdit, onDelete }: ItemCardProps) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: item.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+  };
+
   const handleDelete = () => {
     if (confirm(`Are you sure you want to delete "${item.name}"?`)) {
       onDelete(item.id);
@@ -13,7 +31,16 @@ export function ItemCard({ item, onEdit, onDelete }: ItemCardProps) {
   };
 
   return (
-    <div className={styles.card} onClick={() => onEdit(item.id)}>
+    <div 
+      ref={setNodeRef}
+      className={`${styles.card} ${isDragging ? styles.dragging : ''}`}
+      style={style}
+      onClick={() => onEdit(item.id)}
+    >
+      <div className={styles.dragHandleWrapper} {...attributes} {...listeners}>
+        <DragHandle isDragging={isDragging} />
+      </div>
+      
       <div className={styles.thumbnail}>
         {item.imageData ? (
           <img src={item.imageData} alt={item.name} />
