@@ -1,0 +1,22 @@
+.inputGroup {
+  margin-bottom: 20px;
+}
+
+.label {
+  display: block;
+  margin-bottom: 8px;
+  color: #555;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.required {
+  color: #d32f2f;
+}
+
+.error {
+  display: block;
+  color: #d32f2f;
+  font-size: 13px;
+  margin-top: 4px;
+}

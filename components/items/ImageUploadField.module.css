@@ -1,0 +1,29 @@
+.fileInput {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 16px;
+  transition: border-color 0.3s;
+  font-family: inherit;
+}
+
+.fileInput:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.preview {
+  margin-top: 12px;
+  border: 2px solid #e0e0e0;
+  border-radius: 6px;
+  padding: 8px;
+  background: #f8f9fa;
+}
+
+.preview img {
+  width: 100%;
+  max-height: 200px;
+  object-fit: contain;
+  border-radius: 4px;
+}

@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 80">
+  <!-- Freight car placeholder -->
+  <rect width="100" height="80" fill="#7f8c8d" rx="6"/>
+  
+  <!-- Main container -->
+  <rect x="10" y="15" width="80" height="45" fill="#95a5a6" rx="3"/>
+  
+  <!-- Side panels -->
+  <line x1="10" y1="25" x2="90" y2="25" stroke="#34495e" stroke-width="1"/>
+  <line x1="10" y1="35" x2="90" y2="35" stroke="#34495e" stroke-width="1"/>
+  <line x1="10" y1="45" x2="90" y2="45" stroke="#34495e" stroke-width="1"/>
+  <line x1="10" y1="55" x2="90" y2="55" stroke="#34495e" stroke-width="1"/>
+  
+  <!-- Wheels -->
+  <circle cx="25" cy="65" r="8" fill="#555"/>
+  <circle cx="75" cy="65" r="8" fill="#555"/>
+  
+  <!-- Wheel centers -->
+  <circle cx="25" cy="65" r="3" fill="#888"/>
+  <circle cx="75" cy="65" r="3" fill="#888"/>
+  
+  <!-- Coupling -->
+  <rect x="0" y="35" width="8" height="8" fill="#555" rx="2"/>
+  <rect x="92" y="35" width="8" height="8" fill="#555" rx="2"/>
+</svg>

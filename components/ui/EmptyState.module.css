@@ -1,0 +1,9 @@
+.emptyState {
+  text-align: center;
+  padding: 40px 20px;
+  color: #999;
+}
+
+.emptyState p {
+  margin-bottom: 8px;
+}
