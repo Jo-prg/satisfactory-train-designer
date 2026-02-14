@@ -11,9 +11,9 @@ describe('ItemModal', () => {
     {
       id: '1',
       name: 'Iron Ore',
-      loopTime: 5,
       requiredParts: 100,
       stackSize: 100,
+      beltTier: 'mk5',
       imageData: null,
       freightCars: 1,
     },
