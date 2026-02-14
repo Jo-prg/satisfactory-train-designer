@@ -15,6 +15,17 @@
 export const FREIGHT_CAR_CAPACITY = 32;
 
 /**
+ * Maximum throughput for a fluid freight car (m³/min)
+ * Fluid cars use pipes and have a fixed throughput regardless of other factors
+ */
+export const FLUID_CAR_MAX_THROUGHPUT = 896.52;
+
+/**
+ * Car type - freight or fluid
+ */
+export type CarType = 'freight' | 'fluid';
+
+/**
  * Belt tier type - Mk.5 or Mk.6 conveyor belts
  */
 export type BeltTier = 'mk5' | 'mk6';

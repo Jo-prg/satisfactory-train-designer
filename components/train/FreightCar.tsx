@@ -28,7 +28,11 @@ export function FreightCar({ item, color }: FreightCarProps) {
       {...attributes}
       {...listeners}
     >
-      <img src="/freightcar.png" alt="Freight Car" className={styles.carBase} />
+      <img 
+        src={item.carType === 'fluid' ? '/fluidcar.png' : '/freightcar.png'} 
+        alt={item.carType === 'fluid' ? 'Fluid Car' : 'Freight Car'} 
+        className={styles.carBase} 
+      />
       <div className={styles.carContent}>
         {item.imageData ? (
           <img src={item.imageData} alt={item.name} className={styles.itemImage} />

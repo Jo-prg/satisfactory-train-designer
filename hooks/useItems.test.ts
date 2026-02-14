@@ -12,6 +12,7 @@ describe('useItems', () => {
     requiredParts: 100,
     stackSize: 100,
     beltTier: 'mk5',
+    carType: 'freight',
     imageData: null,
   };
 
@@ -164,6 +165,7 @@ describe('useItems', () => {
       requiredParts: 50,
       stackSize: 100,
       beltTier: 'mk5',
+      carType: 'freight',
       imageData: null,
       freightCars: 1,
     };

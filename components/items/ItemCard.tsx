@@ -51,9 +51,14 @@ export function ItemCard({ item, onEdit, onDelete }: ItemCardProps) {
       <div className={styles.details}>
         <h3 className={styles.name}>{item.name}</h3>
         <div className={styles.stats}>
-          <span><strong>Belt:</strong> {item.beltTier.toUpperCase()}</span>
-          <span><strong>Parts/min:</strong> {item.requiredParts}</span>
-          <span><strong>Stack:</strong> {item.stackSize}</span>
+          <span><strong>Type:</strong> {item.carType === 'fluid' ? 'Fluid' : 'Freight'}</span>
+          {item.carType === 'freight' ? (
+            <>
+              <span><strong>Belt:</strong> {item.beltTier.toUpperCase()}</span>
+              <span><strong>Stack:</strong> {item.stackSize}</span>
+            </>
+          ) : null}
+          <span><strong>{item.carType === 'fluid' ? 'm³/min' : 'Parts/min'}:</strong> {item.requiredParts}</span>
         </div>
       </div>
 

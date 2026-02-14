@@ -1,21 +1,23 @@
 import { z } from 'zod';
-import { BeltTier, SUPPORTED_STACK_SIZES, StackSize } from '../lib/constants';
+import { BeltTier, SUPPORTED_STACK_SIZES, StackSize, CarType } from '../lib/constants';
 
 // ========== CORE TYPES ==========
 
 export interface Item {
   id: string;
   name: string;
+  carType: CarType;           // freight or fluid
   loopTime?: number;          // minutes (optional, for future advanced mode)
-  requiredParts: number;      // parts per minute
-  stackSize: StackSize;       // 50, 100, 200, or 500
-  beltTier: BeltTier;         // mk5 or mk6
+  requiredParts: number;      // parts per minute (or m³/min for fluids)
+  stackSize: StackSize;       // 50, 100, 200, or 500 (only for freight)
+  beltTier: BeltTier;         // mk5 or mk6 (only for freight)
   imageData: string | null;   // Base64 or null
   freightCars: number;        // calculated, rounded up
 }
 
 export interface ItemFormData {
   name: string;
+  carType: CarType;
   loopTime?: number;          // optional, hidden from UI for now
   requiredParts: number;
   stackSize: StackSize;
@@ -56,6 +58,9 @@ export type FormErrors = {
 
 export const itemFormSchema = z.object({
   name: z.string().min(1, 'Item name is required').trim(),
+  carType: z.enum(['freight', 'fluid'], {
+    message: 'Car type must be freight or fluid'
+  }),
   loopTime: z.number().positive('Loop time must be greater than 0').optional(),
   requiredParts: z.number().positive('Required parts must be greater than 0'),
   stackSize: z.number().refine(

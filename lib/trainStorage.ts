@@ -1,41 +1,58 @@
 import type { Train, Item } from '@/types';
-import { calculateFreightCarsRateBased } from './calculations';
-import type { BeltTier, StackSize } from './constants';
+import { calculateFreightCarsRateBased, calculateFreightCars } from './calculations';
+import type { BeltTier, StackSize, CarType } from './constants';
 
 const TRAINS_STORAGE_KEY = 'satisfactory_trains';
 const ACTIVE_TRAIN_ID_KEY = 'satisfactory_active_train_id';
 
 /**
- * Migrate items to include belt tier if missing
- * Adds beltTier: 'mk5' to items that don't have it and recalculates freight cars
+ * Migrate items to include belt tier and car type if missing
+ * Adds beltTier: 'mk5' and carType: 'freight' to items that don't have them and recalculates freight cars
  */
-function migrateBeltTier(trains: Train[]): Train[] {
+function migrateItemFields(trains: Train[]): Train[] {
   let migrated = false;
   
   const migratedTrains = trains.map(train => {
     const migratedItems = train.items.map(item => {
+      let needsMigration = false;
+      let carType: CarType = item.carType || 'freight';
+      let beltTier: BeltTier = item.beltTier || 'mk5';
+      let stackSize: StackSize = 100;
+      
+      // Check if item is missing carType field
+      if (!('carType' in item) || item.carType === undefined) {
+        needsMigration = true;
+        migrated = true;
+        carType = 'freight'; // Default old items to freight type
+      }
+      
       // Check if item is missing beltTier field
       if (!('beltTier' in item) || item.beltTier === undefined) {
+        needsMigration = true;
         migrated = true;
-        
-        // Default to mk5 belt tier
-        const beltTier: BeltTier = 'mk5';
-        
-        // Ensure stackSize is a valid StackSize (default to 100 if invalid)
-        let stackSize: StackSize = 100;
-        if ([50, 100, 200, 500].includes(item.stackSize)) {
-          stackSize = item.stackSize as StackSize;
-        }
-        
-        // Recalculate freight cars using rate-based model
-        const freightCars = calculateFreightCarsRateBased(
+        beltTier = 'mk5'; // Default to mk5 belt tier
+      }
+      
+      // Ensure stackSize is a valid StackSize (default to 100 if invalid)
+      if ([50, 100, 200, 500].includes(item.stackSize)) {
+        stackSize = item.stackSize as StackSize;
+      } else {
+        needsMigration = true;
+        migrated = true;
+      }
+      
+      if (needsMigration) {
+        // Recalculate freight cars using appropriate model
+        const freightCars = calculateFreightCars(
+          carType,
           item.requiredParts,
-          stackSize,
-          beltTier
+          carType === 'freight' ? stackSize : undefined,
+          carType === 'freight' ? beltTier : undefined
         );
         
         return {
           ...item,
+          carType,
           beltTier,
           stackSize,
           freightCars,
@@ -52,7 +69,7 @@ function migrateBeltTier(trains: Train[]): Train[] {
   });
   
   if (migrated) {
-    console.log('Migrated trains to include belt tier (defaulted to mk5)');
+    console.log('Migrated trains to include carType and beltTier fields');
   }
   
   return migratedTrains;
@@ -65,8 +82,8 @@ export function getTrains(): Train[] {
     
     const trains = JSON.parse(data);
     
-    // Migrate trains to include belt tier if needed
-    const migratedTrains = migrateBeltTier(trains);
+    // Migrate trains to include carType and beltTier if needed
+    const migratedTrains = migrateItemFields(trains);
     
     // Save migrated data back if changes were made
     if (JSON.stringify(trains) !== JSON.stringify(migratedTrains)) {

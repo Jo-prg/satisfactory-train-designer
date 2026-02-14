@@ -8,6 +8,7 @@ describe('validateFormData', () => {
       requiredParts: 100,
       stackSize: 100,
       beltTier: 'mk5',
+      carType: 'freight',
       imageData: null,
     };
 
@@ -22,6 +23,7 @@ describe('validateFormData', () => {
       requiredParts: 100,
       stackSize: 100,
       beltTier: 'mk5',
+      carType: 'freight',
       imageData: null,
     };
 
@@ -35,6 +37,7 @@ describe('validateFormData', () => {
       requiredParts: 100,
       stackSize: 100,
       beltTier: 'mk5',
+      carType: 'freight',
       imageData: null,
     };
 
@@ -49,6 +52,7 @@ describe('validateFormData', () => {
       requiredParts: 100,
       stackSize: 100,
       beltTier: 'mk5',
+      carType: 'freight',
       imageData: null,
     };
 
@@ -62,6 +66,7 @@ describe('validateFormData', () => {
       requiredParts: -10,
       stackSize: 100,
       beltTier: 'mk5',
+      carType: 'freight',
       imageData: null,
     };
 
@@ -75,6 +80,7 @@ describe('validateFormData', () => {
       requiredParts: 100,
       stackSize: 75,  // Invalid - not in [50, 100, 200, 500]
       beltTier: 'mk5',
+      carType: 'freight',
       imageData: null,
     } as any;
 
@@ -91,6 +97,7 @@ describe('validateFormData', () => {
         requiredParts: 100,
         stackSize: stackSize as any,
         beltTier: 'mk5',
+        carType: 'freight',
         imageData: null,
       };
 
@@ -105,6 +112,7 @@ describe('validateFormData', () => {
       requiredParts: 100,
       stackSize: 100,
       beltTier: 'mk7',  // Invalid
+      carType: 'freight',
       imageData: null,
     } as any;
 
@@ -118,6 +126,7 @@ describe('validateFormData', () => {
       requiredParts: 100,
       stackSize: 100,
       beltTier: 'mk5',
+      carType: 'freight',
       imageData: null,
     };
 
@@ -126,6 +135,7 @@ describe('validateFormData', () => {
       requiredParts: 100,
       stackSize: 100,
       beltTier: 'mk6',
+      carType: 'freight',
       imageData: null,
     };
 
@@ -140,6 +150,7 @@ describe('validateFormData', () => {
       requiredParts: 0,
       stackSize: 75,
       beltTier: 'mk7',
+      carType: 'freight',
       imageData: null,
     } as any;
 
@@ -153,6 +164,7 @@ describe('validateFormData', () => {
       requiredParts: 100,
       stackSize: 100,
       beltTier: 'mk5',
+      carType: 'freight',
       imageData: null,
     };
 

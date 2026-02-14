@@ -1,5 +1,20 @@
 import type { Item } from '@/types';
-import { getThroughputPerFreightCar, type BeltTier, type StackSize } from './constants';
+import { getThroughputPerFreightCar, FLUID_CAR_MAX_THROUGHPUT, type BeltTier, type StackSize, type CarType } from './constants';
+
+/**
+ * Calculate the number of fluid cars needed
+ * 
+ * Fluids use pipes with a fixed max throughput of 896.52 m³/min per car
+ * 
+ * Formula: CEILING(required_flow_rate ÷ fluid_car_max_throughput)
+ * 
+ * @param requiredFlowRate - Required flow rate in m³/min
+ * @returns Number of fluid cars needed (always >= 1)
+ */
+export function calculateFluidCars(requiredFlowRate: number): number {
+  const fluidCars = requiredFlowRate / FLUID_CAR_MAX_THROUGHPUT;
+  return Math.ceil(fluidCars);
+}
 
 /**
  * Calculate the number of freight cars needed using RATE-BASED MODEL
@@ -22,6 +37,33 @@ export function calculateFreightCarsRateBased(
   const throughputPerFreightCar = getThroughputPerFreightCar(beltTier, stackSize);
   const freightCars = requiredItemsPerMinute / throughputPerFreightCar;
   return Math.ceil(freightCars);
+}
+
+/**
+ * Calculate freight cars based on car type
+ * 
+ * @param carType - Type of car (freight or fluid)
+ * @param requiredItemsPerMinute - Required throughput (items/min or m³/min)
+ * @param stackSize - Item stack size (only for freight cars)
+ * @param beltTier - Belt tier (only for freight cars)
+ * @returns Number of cars needed (always >= 1)
+ */
+export function calculateFreightCars(
+  carType: CarType,
+  requiredItemsPerMinute: number,
+  stackSize?: StackSize,
+  beltTier?: BeltTier
+): number {
+  if (carType === 'fluid') {
+    return calculateFluidCars(requiredItemsPerMinute);
+  }
+  
+  // For freight cars, stackSize and beltTier are required
+  if (!stackSize || !beltTier) {
+    throw new Error('Stack size and belt tier are required for freight cars');
+  }
+  
+  return calculateFreightCarsRateBased(requiredItemsPerMinute, stackSize, beltTier);
 }
 
 /**

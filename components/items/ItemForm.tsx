@@ -6,7 +6,7 @@ import type { ItemFormProps } from '@/types';
 import { FormField } from '@/components/ui/FormField';
 import { ImageUploadField } from './ImageUploadField';
 import { validateFormData } from '@/lib/validation';
-import { SUPPORTED_STACK_SIZES, type BeltTier, type StackSize } from '@/lib/constants';
+import { SUPPORTED_STACK_SIZES, type BeltTier, type StackSize, type CarType } from '@/lib/constants';
 import styles from './ItemForm.module.css';
 
 const beltTierOptions = [
@@ -74,6 +74,7 @@ const selectStyles = {
 export function ItemForm({ mode, initialData, onSubmit, onCancel }: ItemFormProps) {
   const [formData, setFormData] = useState({
     name: initialData?.name || '',
+    carType: (initialData?.carType || 'freight') as CarType,
     loopTime: initialData?.loopTime,  // Hidden but preserved for storage
     requiredParts: initialData?.requiredParts || 0,
     stackSize: (initialData?.stackSize || 100) as StackSize,
@@ -88,6 +89,7 @@ export function ItemForm({ mode, initialData, onSubmit, onCancel }: ItemFormProp
     if (initialData) {
       setFormData({
         name: initialData.name || '',
+        carType: (initialData.carType || 'freight') as CarType,
         loopTime: initialData.loopTime,
         requiredParts: initialData.requiredParts || 0,
         stackSize: (initialData.stackSize || 100) as StackSize,
@@ -111,6 +113,33 @@ export function ItemForm({ mode, initialData, onSubmit, onCancel }: ItemFormProp
 
   return (
     <form onSubmit={handleSubmit} className={styles.form}>
+      <FormField label="Car Type" required error={errors.carType}>
+        <div className={styles.radioGroup}>
+          <label className={styles.radioLabel}>
+            <input
+              type="radio"
+              name="carType"
+              value="freight"
+              checked={formData.carType === 'freight'}
+              onChange={(e) => setFormData((prev) => ({ ...prev, carType: 'freight' as CarType }))}
+              className={styles.radioInput}
+            />
+            <span className={styles.radioText}>Freight Car</span>
+          </label>
+          <label className={styles.radioLabel}>
+            <input
+              type="radio"
+              name="carType"
+              value="fluid"
+              checked={formData.carType === 'fluid'}
+              onChange={(e) => setFormData((prev) => ({ ...prev, carType: 'fluid' as CarType }))}
+              className={styles.radioInput}
+            />
+            <span className={styles.radioText}>Fluid Car</span>
+          </label>
+        </div>
+      </FormField>
+
       <FormField label="Item Name" required error={errors.name}>
         <input
           type="text"
@@ -121,7 +150,7 @@ export function ItemForm({ mode, initialData, onSubmit, onCancel }: ItemFormProp
         />
       </FormField>
 
-      <FormField label="Required parts/min" required error={errors.requiredParts}>
+      <FormField label={formData.carType === 'fluid' ? 'Required m³/min' : 'Required parts/min'} required error={errors.requiredParts}>
         <input
           type="number"
           value={formData.requiredParts || ''}
@@ -132,33 +161,37 @@ export function ItemForm({ mode, initialData, onSubmit, onCancel }: ItemFormProp
         />
       </FormField>
 
-      <FormField label="Belt Tier" required error={errors.beltTier}>
-        <Select
-          value={beltTierOptions.find(opt => opt.value === formData.beltTier)}
-          onChange={(option) => option && setFormData((prev) => ({ ...prev, beltTier: option.value }))}
-          options={beltTierOptions}
-          styles={selectStyles}
-          isSearchable={false}
-        />
-      </FormField>
+      {formData.carType === 'freight' && (
+        <>
+          <FormField label="Belt Tier" required error={errors.beltTier}>
+            <Select
+              value={beltTierOptions.find(opt => opt.value === formData.beltTier)}
+              onChange={(option) => option && setFormData((prev) => ({ ...prev, beltTier: option.value }))}
+              options={beltTierOptions}
+              styles={selectStyles}
+              isSearchable={false}
+            />
+          </FormField>
 
-      <FormField label="Stack Size" required error={errors.stackSize}>
-        <div className={styles.radioGroup}>
-          {SUPPORTED_STACK_SIZES.map((size) => (
-            <label key={size} className={styles.radioLabel}>
-              <input
-                type="radio"
-                name="stackSize"
-                value={size}
-                checked={formData.stackSize === size}
-                onChange={(e) => setFormData((prev) => ({ ...prev, stackSize: parseInt(e.target.value) as StackSize }))}
-                className={styles.radioInput}
-              />
-              <span className={styles.radioText}>{size}</span>
-            </label>
-          ))}
-        </div>
-      </FormField>
+          <FormField label="Stack Size" required error={errors.stackSize}>
+            <div className={styles.radioGroup}>
+              {SUPPORTED_STACK_SIZES.map((size) => (
+                <label key={size} className={styles.radioLabel}>
+                  <input
+                    type="radio"
+                    name="stackSize"
+                    value={size}
+                    checked={formData.stackSize === size}
+                    onChange={(e) => setFormData((prev) => ({ ...prev, stackSize: parseInt(e.target.value) as StackSize }))}
+                    className={styles.radioInput}
+                  />
+                  <span className={styles.radioText}>{size}</span>
+                </label>
+              ))}
+            </div>
+          </FormField>
+        </>
+      )}
 
       <ImageUploadField
         onChange={useCallback((imageData) => setFormData((prev) => ({ ...prev, imageData })), [])}
