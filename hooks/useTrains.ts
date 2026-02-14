@@ -5,7 +5,7 @@ import type { Train, Item, ItemFormData } from '@/types';
 import { getTrains, saveTrains, getActiveTrainId, setActiveTrainId, migrateOldItemsToTrains } from '@/lib/trainStorage';
 import { generateTrainId } from '@/lib/generateTrainId';
 import { generateItemId } from '@/lib/idGenerator';
-import { calculateFreightCars } from '@/lib/calculations';
+import { calculateFreightCarsRateBased } from '@/lib/calculations';
 import { arrayMove } from '@/lib/arrayUtils';
 
 export function useTrains() {
@@ -137,10 +137,10 @@ export function useTrains() {
 
   // Add item to current working items
   const addItem = useCallback((data: ItemFormData) => {
-    const freightCars = calculateFreightCars(
-      data.loopTime,
+    const freightCars = calculateFreightCarsRateBased(
       data.requiredParts,
-      data.stackSize
+      data.stackSize,
+      data.beltTier
     );
 
     const newItem: Item = {
@@ -149,6 +149,7 @@ export function useTrains() {
       loopTime: data.loopTime,
       requiredParts: data.requiredParts,
       stackSize: data.stackSize,
+      beltTier: data.beltTier,
       imageData: data.imageData,
       freightCars,
     };
@@ -160,10 +161,10 @@ export function useTrains() {
 
   // Update item in current working items
   const updateItem = useCallback((id: string, data: ItemFormData) => {
-    const freightCars = calculateFreightCars(
-      data.loopTime,
+    const freightCars = calculateFreightCarsRateBased(
       data.requiredParts,
-      data.stackSize
+      data.stackSize,
+      data.beltTier
     );
 
     setCurrentItems(prev =>
@@ -175,6 +176,7 @@ export function useTrains() {
               loopTime: data.loopTime,
               requiredParts: data.requiredParts,
               stackSize: data.stackSize,
+              beltTier: data.beltTier,
               imageData: data.imageData,
               freightCars,
             }

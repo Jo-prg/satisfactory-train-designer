@@ -1,13 +1,79 @@
-import type { Train } from '@/types';
+import type { Train, Item } from '@/types';
+import { calculateFreightCarsRateBased } from './calculations';
+import type { BeltTier, StackSize } from './constants';
 
 const TRAINS_STORAGE_KEY = 'satisfactory_trains';
 const ACTIVE_TRAIN_ID_KEY = 'satisfactory_active_train_id';
+
+/**
+ * Migrate items to include belt tier if missing
+ * Adds beltTier: 'mk5' to items that don't have it and recalculates freight cars
+ */
+function migrateBeltTier(trains: Train[]): Train[] {
+  let migrated = false;
+  
+  const migratedTrains = trains.map(train => {
+    const migratedItems = train.items.map(item => {
+      // Check if item is missing beltTier field
+      if (!('beltTier' in item) || item.beltTier === undefined) {
+        migrated = true;
+        
+        // Default to mk5 belt tier
+        const beltTier: BeltTier = 'mk5';
+        
+        // Ensure stackSize is a valid StackSize (default to 100 if invalid)
+        let stackSize: StackSize = 100;
+        if ([50, 100, 200, 500].includes(item.stackSize)) {
+          stackSize = item.stackSize as StackSize;
+        }
+        
+        // Recalculate freight cars using rate-based model
+        const freightCars = calculateFreightCarsRateBased(
+          item.requiredParts,
+          stackSize,
+          beltTier
+        );
+        
+        return {
+          ...item,
+          beltTier,
+          stackSize,
+          freightCars,
+        };
+      }
+      
+      return item;
+    });
+    
+    return {
+      ...train,
+      items: migratedItems,
+    };
+  });
+  
+  if (migrated) {
+    console.log('Migrated trains to include belt tier (defaulted to mk5)');
+  }
+  
+  return migratedTrains;
+}
 
 export function getTrains(): Train[] {
   try {
     const data = localStorage.getItem(TRAINS_STORAGE_KEY);
     if (!data) return [];
-    return JSON.parse(data);
+    
+    const trains = JSON.parse(data);
+    
+    // Migrate trains to include belt tier if needed
+    const migratedTrains = migrateBeltTier(trains);
+    
+    // Save migrated data back if changes were made
+    if (JSON.stringify(trains) !== JSON.stringify(migratedTrains)) {
+      saveTrains(migratedTrains);
+    }
+    
+    return migratedTrains;
   } catch (error) {
     console.error('Error loading trains from localStorage:', error);
     return [];

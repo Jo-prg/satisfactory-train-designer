@@ -5,9 +5,23 @@ describe('validateFormData', () => {
   it('should return no errors for valid data', () => {
     const validData: ItemFormData = {
       name: 'Iron Ore',
+      requiredParts: 100,
+      stackSize: 100,
+      beltTier: 'mk5',
+      imageData: null,
+    };
+
+    const errors = validateFormData(validData);
+    expect(errors).toEqual({});
+  });
+
+  it('should accept valid data with optional loopTime', () => {
+    const validData: ItemFormData = {
+      name: 'Iron Ore',
       loopTime: 5,
       requiredParts: 100,
       stackSize: 100,
+      beltTier: 'mk5',
       imageData: null,
     };
 
@@ -18,9 +32,9 @@ describe('validateFormData', () => {
   it('should return error for empty name', () => {
     const invalidData: ItemFormData = {
       name: '',
-      loopTime: 5,
       requiredParts: 100,
       stackSize: 100,
+      beltTier: 'mk5',
       imageData: null,
     };
 
@@ -28,12 +42,13 @@ describe('validateFormData', () => {
     expect(errors.name).toBeDefined();
   });
 
-  it('should return error for zero loop time', () => {
+  it('should return error for zero loop time if provided', () => {
     const invalidData: ItemFormData = {
       name: 'Test',
       loopTime: 0,
       requiredParts: 100,
       stackSize: 100,
+      beltTier: 'mk5',
       imageData: null,
     };
 
@@ -44,9 +59,9 @@ describe('validateFormData', () => {
   it('should return error for negative required parts', () => {
     const invalidData: ItemFormData = {
       name: 'Test',
-      loopTime: 5,
       requiredParts: -10,
       stackSize: 100,
+      beltTier: 'mk5',
       imageData: null,
     };
 
@@ -54,27 +69,79 @@ describe('validateFormData', () => {
     expect(errors.requiredParts).toBeDefined();
   });
 
-  it('should return error for stack size less than 1', () => {
-    const invalidData: ItemFormData = {
+  it('should return error for invalid stack size', () => {
+    const invalidData = {
       name: 'Test',
-      loopTime: 5,
       requiredParts: 100,
-      stackSize: 0,
+      stackSize: 75,  // Invalid - not in [50, 100, 200, 500]
+      beltTier: 'mk5',
       imageData: null,
-    };
+    } as any;
 
     const errors = validateFormData(invalidData);
     expect(errors.stackSize).toBeDefined();
   });
 
+  it('should accept all valid stack sizes', () => {
+    const validStackSizes = [50, 100, 200, 500];
+    
+    validStackSizes.forEach(stackSize => {
+      const validData: ItemFormData = {
+        name: 'Test',
+        requiredParts: 100,
+        stackSize: stackSize as any,
+        beltTier: 'mk5',
+        imageData: null,
+      };
+
+      const errors = validateFormData(validData);
+      expect(errors).toEqual({});
+    });
+  });
+
+  it('should return error for invalid belt tier', () => {
+    const invalidData = {
+      name: 'Test',
+      requiredParts: 100,
+      stackSize: 100,
+      beltTier: 'mk7',  // Invalid
+      imageData: null,
+    } as any;
+
+    const errors = validateFormData(invalidData);
+    expect(errors.beltTier).toBeDefined();
+  });
+
+  it('should accept both mk5 and mk6 belt tiers', () => {
+    const mk5Data: ItemFormData = {
+      name: 'Test',
+      requiredParts: 100,
+      stackSize: 100,
+      beltTier: 'mk5',
+      imageData: null,
+    };
+
+    const mk6Data: ItemFormData = {
+      name: 'Test',
+      requiredParts: 100,
+      stackSize: 100,
+      beltTier: 'mk6',
+      imageData: null,
+    };
+
+    expect(validateFormData(mk5Data)).toEqual({});
+    expect(validateFormData(mk6Data)).toEqual({});
+  });
+
   it('should return multiple errors for multiple invalid fields', () => {
-    const invalidData: ItemFormData = {
+    const invalidData = {
       name: '',
       loopTime: -5,
       requiredParts: 0,
-      stackSize: 0,
+      stackSize: 75,
+      beltTier: 'mk7',
       imageData: null,
-    };
+    } as any;
 
     const errors = validateFormData(invalidData);
     expect(Object.keys(errors).length).toBeGreaterThan(1);
@@ -83,9 +150,9 @@ describe('validateFormData', () => {
   it('should trim whitespace from name', () => {
     const data: ItemFormData = {
       name: '  Iron Ore  ',
-      loopTime: 5,
       requiredParts: 100,
       stackSize: 100,
+      beltTier: 'mk5',
       imageData: null,
     };
 

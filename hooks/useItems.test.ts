@@ -9,9 +9,9 @@ describe('useItems', () => {
 
   const mockItemData: ItemFormData = {
     name: 'Iron Ore',
-    loopTime: 5,
     requiredParts: 100,
     stackSize: 100,
+    beltTier: 'mk5',
     imageData: null,
   };
 
@@ -29,7 +29,9 @@ describe('useItems', () => {
 
     expect(result.current.items).toHaveLength(1);
     expect(result.current.items[0].name).toBe('Iron Ore');
-    expect(result.current.items[0].freightCars).toBe(1); // (5 * 200) / (32 * 100) = 0.3125 -> 1
+    // Mk.5, stack 100 = 1278 items/min per car
+    // 100 / 1278 = 0.078 -> 1 car
+    expect(result.current.items[0].freightCars).toBe(1);
   });
 
   it('should update an item', () => {
@@ -129,11 +131,13 @@ describe('useItems', () => {
     act(() => {
       result.current.updateItem(itemId, {
         ...mockItemData,
-        requiredParts: 200, // Double the parts
+        requiredParts: 2000, // Higher throughput
       });
     });
 
-    expect(result.current.items[0].freightCars).toBe(1); // (5 * 400) / (32 * 100) = 0.625 -> 1
+    // Mk.5, stack 100 = 1278 items/min per car
+    // 2000 / 1278 = 1.56 -> 2 cars
+    expect(result.current.items[0].freightCars).toBe(2);
   });
 
   it('should persist items to localStorage', () => {
@@ -157,9 +161,9 @@ describe('useItems', () => {
     const existingItem = {
       id: 'test-id',
       name: 'Existing Item',
-      loopTime: 3,
       requiredParts: 50,
       stackSize: 100,
+      beltTier: 'mk5',
       imageData: null,
       freightCars: 1,
     };

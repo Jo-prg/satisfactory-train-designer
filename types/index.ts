@@ -1,22 +1,25 @@
 import { z } from 'zod';
+import { BeltTier, SUPPORTED_STACK_SIZES, StackSize } from '../lib/constants';
 
 // ========== CORE TYPES ==========
 
 export interface Item {
   id: string;
   name: string;
-  loopTime: number;           // minutes
+  loopTime?: number;          // minutes (optional, for future advanced mode)
   requiredParts: number;      // parts per minute
-  stackSize: number;          // integer >=1
+  stackSize: StackSize;       // 50, 100, 200, or 500
+  beltTier: BeltTier;         // mk5 or mk6
   imageData: string | null;   // Base64 or null
   freightCars: number;        // calculated, rounded up
 }
 
 export interface ItemFormData {
   name: string;
-  loopTime: number;
+  loopTime?: number;          // optional, hidden from UI for now
   requiredParts: number;
-  stackSize: number;
+  stackSize: StackSize;
+  beltTier: BeltTier;
   imageData: string | null;
 }
 
@@ -53,9 +56,14 @@ export type FormErrors = {
 
 export const itemFormSchema = z.object({
   name: z.string().min(1, 'Item name is required').trim(),
-  loopTime: z.number().positive('Loop time must be greater than 0'),
+  loopTime: z.number().positive('Loop time must be greater than 0').optional(),
   requiredParts: z.number().positive('Required parts must be greater than 0'),
-  stackSize: z.number().int().min(1, 'Stack size must be at least 1'),
+  stackSize: z.union([z.literal(50), z.literal(100), z.literal(200), z.literal(500)], {
+    errorMap: () => ({ message: 'Stack size must be 50, 100, 200, or 500' })
+  }),
+  beltTier: z.enum(['mk5', 'mk6'], {
+    errorMap: () => ({ message: 'Belt tier must be mk5 or mk6' })
+  }),
   imageData: z.string().nullable(),
 });
 
