@@ -58,11 +58,12 @@ export const itemFormSchema = z.object({
   name: z.string().min(1, 'Item name is required').trim(),
   loopTime: z.number().positive('Loop time must be greater than 0').optional(),
   requiredParts: z.number().positive('Required parts must be greater than 0'),
-  stackSize: z.union([z.literal(50), z.literal(100), z.literal(200), z.literal(500)], {
-    errorMap: () => ({ message: 'Stack size must be 50, 100, 200, or 500' })
-  }),
+  stackSize: z.number().refine(
+    (val) => [50, 100, 200, 500].includes(val),
+    { message: 'Stack size must be 50, 100, 200, or 500' }
+  ),
   beltTier: z.enum(['mk5', 'mk6'], {
-    errorMap: () => ({ message: 'Belt tier must be mk5 or mk6' })
+    message: 'Belt tier must be mk5 or mk6'
   }),
   imageData: z.string().nullable(),
 });
